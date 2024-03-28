@@ -1,0 +1,26 @@
+.active {
+    font-weight: bold;
+}
+
+.paginator {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.pageNumber {
+    border: 1px solid #ccc;
+    cursor: pointer;
+    min-width: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #fff;
+}
