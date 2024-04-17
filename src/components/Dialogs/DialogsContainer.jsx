@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendMessageCreator } from '../../redux/dialogs-reduser.js';
+import { sendMessageCreator } from '../../redux/dialogs-reduser';
 import Dialogs from './Dialogs';
 import {connect} from 'react-redux';
 import { Redirect } from 'react-router-dom';

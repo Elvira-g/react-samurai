@@ -11,20 +11,44 @@ import Preloader from '../common/preloader/Preloader';
 import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { getUsersList, getCurrentPage, getFollowingInProgress, getIsFetching, getPageSize, getTotalUsersCount } from '../../redux/users-selectors';
+import { UserType } from '../../types/types';
+import { AppStateType } from '../../redux/redux-store';
 
-class UsersContainer extends React.Component {
+type MapStatePropsType = {
+    currentPage: number
+    pageSize: number
+    isFetching: boolean
+    totalUsersCount: number
+    users: Array<UserType>
+    followingInProgress: Array<number>
+}
+
+type MapDispatchPropsType = {
+    followUser: (userId: number) => void
+    unfollowUser: (userId: number) => void
+    getUsers: (currentPage: number, pageSize: number) => void
+}
+
+type OwnPropsType = {
+    pageTitle: string
+}
+
+type UserContainerPropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
+
+class UsersContainer extends React.Component<UserContainerPropsType> {
 
     componentDidMount() {
         this.props.getUsers(this.props.currentPage,this.props.pageSize)
     }
 
-    onPageChanged = (pageNumber) => {
+    onPageChanged = (pageNumber: number) => {
         this.props.getUsers(pageNumber,this.props.pageSize)
 
     }
 
     render() {
         return <div>
+            <h1>{this.props.pageTitle}</h1>
             {this.props.isFetching ? <Preloader/>: null}
             <Users
                 totalUsersCount={this.props.totalUsersCount}
@@ -41,7 +65,7 @@ class UsersContainer extends React.Component {
 }
 
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType): MapStatePropsType => {
     return {
         users: getUsersList(state),
         pageSize: getPageSize(state),
@@ -90,11 +114,8 @@ let mapStateToProps = (state) => {
 
 export default compose(
         // withAuthRedirect,
-        connect(mapStateToProps,{
+        connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(mapStateToProps,{
             followUser,
             unfollowUser,
-            setUsers,
-            setPageNumber,
-            toggleFollowingProgress,
             getUsers,
         }))(UsersContainer)
